@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/screens/guest/enter_app_options.dart';
-import 'package:timezone/data/latest.dart' as tz;
+
+const String google_maps_key = "AIzaSyABzruSY9X5pBiD50bfYUUEOUO8zloO1jE";
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  tz.initializeTimeZones();
 
   runApp(const MyApp());
 

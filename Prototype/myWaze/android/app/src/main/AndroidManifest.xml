@@ -12,13 +12,16 @@
 
     <application
         android:usesCleartextTraffic="true"
-        android:label="EasyDish"
+        android:label="MyWaze"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
 
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/logo_transp" />
+
+        <meta-data android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyABzruSY9X5pBiD50bfYUUEOUO8zloO1jE"/>
 
         <activity
             android:name=".MainActivity"

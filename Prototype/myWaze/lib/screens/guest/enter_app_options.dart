@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/screens/guest/create_account_page.dart';
-import 'package:flutter_app_test/screens/home/home_page.dart';
 import 'login_page.dart';
 
 class WelcomeScreen extends StatelessWidget {

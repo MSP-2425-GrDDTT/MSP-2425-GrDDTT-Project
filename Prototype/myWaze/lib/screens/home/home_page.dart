@@ -1,7 +1,6 @@
 // home_page.dart
 import 'package:flutter/material.dart';
-
-import '../../data_classes/user_data.dart';
+import '../../live_tracking_page.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -39,6 +38,7 @@ class _HomePageState extends State<HomePage> {
           automaticallyImplyLeading: false, // Remove the back arrow
           scrolledUnderElevation: 0,
         ),
+        body: LiveTrackingPage(),
       ),
     );
   }

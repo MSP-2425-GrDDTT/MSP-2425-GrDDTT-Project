@@ -38,7 +38,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.1.2
   shared_preferences: ^2.3.3
-  timezone: ^0.10.0
+  flutter_polyline_points: ^1.0.0
+  google_maps_flutter: ^2.5.0
+  location: ^5.0.3
+  flutter_svg: ^1.1.0
+  geocoding: ^2.1.0
 
 dev_dependencies:
   flutter_test:
@@ -63,6 +67,9 @@ flutter:
   uses-material-design: true
   assets:
     - assets/logo_transp.png
+    - assets/Badge.png
+    - assets/Pin_destination.png
+    - assets/Pin_source.png
 
   # To add assets to your application, add an assets section, like this:
   # assets:
