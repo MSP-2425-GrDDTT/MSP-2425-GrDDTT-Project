@@ -2,9 +2,11 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/main.dart';
 import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geo;
+import 'package:intl/intl.dart';
 
 class LiveTrackingPage extends StatefulWidget {
   const LiveTrackingPage({super.key});
@@ -16,6 +18,9 @@ class LiveTrackingPage extends StatefulWidget {
 class _LiveTrackingPageState extends State<LiveTrackingPage> {
   final Completer<GoogleMapController> _controller = Completer();
   final TextEditingController _addressController = TextEditingController();
+
+  String? eta;
+  double currentZoomLevel = 13.5;
 
   LatLng sourceLocation = LatLng(37.33500926, -122.03272188);
   LatLng destinationLocation = LatLng(37.33429383, -122.06600055);
@@ -43,7 +48,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
       googleMapController.animateCamera(CameraUpdate.newCameraPosition(
         CameraPosition(
           target: LatLng(newLoc.latitude!, newLoc.longitude!),
-          zoom: 13.5,
+          zoom: currentZoomLevel,
         ),
       ));
       setState(() {});
@@ -88,6 +93,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
         print("LatLng: ${loc.latitude}, ${loc.longitude}");
         destinationLocation = LatLng(loc.latitude, loc.longitude);
         getPolyPoints();
+        calculateETAAndDuration();
         setState(() {});
       }
       else {
@@ -114,12 +120,66 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
     });
   }
 
+  void calculateETAAndDuration() async {
+    if (currentLocation == null || destinationLocation == null) {
+      print("Missing location data for ETA and duration calculation");
+      return;
+    }
+
+    // Calculate the distance in meters
+    double distanceInMeters = Geolocator.distanceBetween(
+      currentLocation!.latitude!,
+      currentLocation!.longitude!,
+      destinationLocation.latitude,
+      destinationLocation.longitude,
+    );
+
+    print("Distance in meters: $distanceInMeters");
+
+    print("Current Location: ${currentLocation!.latitude}, ${currentLocation!.longitude}");
+    print("Destination Location: ${destinationLocation.latitude}, ${destinationLocation.longitude}");
+
+
+    // Use a more realistic average speed in km/h (e.g., 40 km/h for urban driving)
+    double averageSpeedInKmPerHour = 50.0;
+
+    // Convert speed to meters per second for consistency
+    double averageSpeedInMetersPerSecond = averageSpeedInKmPerHour / 3.6;
+
+    // Calculate time in seconds
+    double timeInSeconds = distanceInMeters / averageSpeedInMetersPerSecond;
+
+    // Convert to a readable format
+    DateTime arrivalTime = DateTime.now().add(Duration(seconds: timeInSeconds.toInt()));
+    String formattedETA = DateFormat('HH:mm').format(arrivalTime);
+
+    // Calculate duration in minutes or hours
+    String formattedDuration;
+    if (timeInSeconds < 3600) {
+      // Less than 1 hour, show only minutes
+      formattedDuration = "${(timeInSeconds / 60).toInt()} min";
+    } else {
+      // 1 hour or more, show hours and minutes
+      int hours = (timeInSeconds / 3600).floor();
+      int minutes = ((timeInSeconds % 3600) / 60).toInt();
+      if (minutes == 0) {
+        formattedDuration = "$hours h";
+      } else {
+        formattedDuration = "$hours h ${minutes} min";
+      }
+    }
+
+    setState(() {
+      eta = "ETA: $formattedETA, Duration: $formattedDuration";
+    });
+  }
+
   @override
   void initState(){
+    super.initState();
     getCurrentLocation();
     setCustomMarkerIcon();
     getPolyPoints();
-    super.initState();
   }
 
   @override
@@ -132,8 +192,11 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
           child: GoogleMap(
             initialCameraPosition: CameraPosition(
               target: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-              zoom: 14.5,
+              zoom: currentZoomLevel,
             ),
+            onCameraMove: (position) {
+              currentZoomLevel = position.zoom;
+            },
             polylines: {
               Polyline(
                 polylineId: const PolylineId("route"),
@@ -164,6 +227,14 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
             },
           ),
         ),
+        if (eta != null)
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              "ETA: $eta",
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+          ),
         Container(
           color: Colors.white,
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
