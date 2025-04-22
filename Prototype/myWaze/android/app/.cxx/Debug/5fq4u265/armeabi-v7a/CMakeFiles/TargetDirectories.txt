@@ -1,0 +1,2 @@
+C:/Users/tomas/MSP-2425-GrDDTT-Project/Prototype/myWaze/android/app/.cxx/Debug/5fq4u265/armeabi-v7a/CMakeFiles/edit_cache.dir
+C:/Users/tomas/MSP-2425-GrDDTT-Project/Prototype/myWaze/android/app/.cxx/Debug/5fq4u265/armeabi-v7a/CMakeFiles/rebuild_cache.dir

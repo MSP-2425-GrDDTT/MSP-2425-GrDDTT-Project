@@ -1,7 +1,7 @@
 // home_page.dart
 import 'package:flutter/material.dart';
 import '../../live_tracking_page.dart';
-
+import '../settings/settings_screen.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
 
@@ -37,6 +37,19 @@ class _HomePageState extends State<HomePage> {
           ),
           automaticallyImplyLeading: false, // Remove the back arrow
           scrolledUnderElevation: 0,
+          actions: [
+            IconButton(
+              icon: const Icon(Icons.settings, color: Colors.white),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const SettingsScreen(),
+                  ),
+                );
+              },
+            )
+          ],
         ),
         body: LiveTrackingPage(),
       ),

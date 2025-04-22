@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app_test/screens/guest/enter_app_options.dart';
-
+import 'package:flutter_app_test/screens/settings/vehicle_registration.dart';
 const String google_maps_key = "AIzaSyABzruSY9X5pBiD50bfYUUEOUO8zloO1jE";
 
 void main() async {
@@ -23,6 +23,9 @@ class MyApp extends StatelessWidget {
       ),
       home: const WelcomeScreen(),
       debugShowCheckedModeBanner: false,
+       routes: {
+      '/registerVehicle': (context) => const VehicleRegistrationScreen(),
+      },
     );
   }
 }

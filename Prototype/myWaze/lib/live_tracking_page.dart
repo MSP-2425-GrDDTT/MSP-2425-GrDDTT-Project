@@ -56,7 +56,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
   }
 
   void getPolyPoints() async {
-    if (currentLocation == null || destinationLocation == null) {
+    if (currentLocation == null) {
       print("Missing location data");
       return;
     }
@@ -121,7 +121,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
   }
 
   void calculateETAAndDuration() async {
-    if (currentLocation == null || destinationLocation == null) {
+    if (currentLocation == null) {
       print("Missing location data for ETA and duration calculation");
       return;
     }
@@ -165,7 +165,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
       if (minutes == 0) {
         formattedDuration = "$hours h";
       } else {
-        formattedDuration = "$hours h ${minutes} min";
+        formattedDuration = "$hours h $minutes min";
       }
     }
 

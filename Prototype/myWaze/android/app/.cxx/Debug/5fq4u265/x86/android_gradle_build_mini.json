@@ -1,0 +1,20 @@
+{
+  "buildFiles": [
+    "C:\\Users\\tomas\\Flutter\\flutter_windows_3.29.3-stable\\flutter\\packages\\flutter_tools\\gradle\\src\\main\\groovy\\CMakeLists.txt"
+  ],
+  "cleanCommandsComponents": [
+    [
+      "C:\\Users\\tomas\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+      "-C",
+      "C:\\Users\\tomas\\MSP-2425-GrDDTT-Project\\Prototype\\myWaze\\android\\app\\.cxx\\Debug\\5fq4u265\\x86",
+      "clean"
+    ]
+  ],
+  "buildTargetsCommandComponents": [
+    "C:\\Users\\tomas\\AppData\\Local\\Android\\sdk\\cmake\\3.22.1\\bin\\ninja.exe",
+    "-C",
+    "C:\\Users\\tomas\\MSP-2425-GrDDTT-Project\\Prototype\\myWaze\\android\\app\\.cxx\\Debug\\5fq4u265\\x86",
+    "{LIST_OF_TARGETS_TO_BUILD}"
+  ],
+  "libraries": {}
+}
