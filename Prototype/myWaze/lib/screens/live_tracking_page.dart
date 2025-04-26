@@ -7,6 +7,9 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:location/location.dart';
 import 'package:geocoding/geocoding.dart' as geo;
 import 'package:intl/intl.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'speedmetertest.dart';
 
 class LiveTrackingPage extends StatefulWidget {
   const LiveTrackingPage({super.key});
@@ -57,7 +60,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
 
   void getPolyPoints() async {
     if (currentLocation == null) {
-      print("Missing location data");
+      //print("Missing location data");
       return;
     }
 
@@ -70,9 +73,9 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
       PointLatLng(destinationLocation.latitude, destinationLocation.longitude),
     );
 
-    print("Polyline status: ${result.status}");
+    /*print("Polyline status: ${result.status}");
     print("Polyline error message: ${result.errorMessage}");
-    print("Polyline points count: ${result.points.length}");
+    print("Polyline points count: ${result.points.length}");*/
 
     if (result.points.isNotEmpty) {
       polylineCoordinates = result.points
@@ -86,21 +89,21 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
   Future<void> searchDestinationAndDrawRoute(String address) async {
     try {
       List<geo.Location> locations = await geo.locationFromAddress(address);
-      print("Geocoded locations: $locations");
+      //print("Geocoded locations: $locations");
 
       if (locations.isNotEmpty) {
         final loc = locations.first;
-        print("LatLng: ${loc.latitude}, ${loc.longitude}");
+        //print("LatLng: ${loc.latitude}, ${loc.longitude}");
         destinationLocation = LatLng(loc.latitude, loc.longitude);
         getPolyPoints();
         calculateETAAndDuration();
         setState(() {});
       }
       else {
-        print("No geocoding results.");
+        //print("No geocoding results.");
       }
     } catch (e) {
-      print("Geocoding error: $e");
+      //print("Geocoding error: $e");
     }
   }
 
@@ -122,7 +125,7 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
 
   void calculateETAAndDuration() async {
     if (currentLocation == null) {
-      print("Missing location data for ETA and duration calculation");
+      //print("Missing location data for ETA and duration calculation");
       return;
     }
 
@@ -134,10 +137,10 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
       destinationLocation.longitude,
     );
 
-    print("Distance in meters: $distanceInMeters");
+    /*print("Distance in meters: $distanceInMeters");
 
     print("Current Location: ${currentLocation!.latitude}, ${currentLocation!.longitude}");
-    print("Destination Location: ${destinationLocation.latitude}, ${destinationLocation.longitude}");
+    print("Destination Location: ${destinationLocation.latitude}, ${destinationLocation.longitude}");*/
 
 
     // Use a more realistic average speed in km/h (e.g., 40 km/h for urban driving)
@@ -186,81 +189,98 @@ class _LiveTrackingPageState extends State<LiveTrackingPage> {
   Widget build(BuildContext context) {
     return currentLocation == null
         ? const Center(child: Text("Loading..."))
-        : Column(
+        : Stack(
       children: [
-        Expanded(
-          child: GoogleMap(
-            initialCameraPosition: CameraPosition(
-              target: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-              zoom: currentZoomLevel,
-            ),
-            onCameraMove: (position) {
-              currentZoomLevel = position.zoom;
-            },
-            polylines: {
-              Polyline(
-                polylineId: const PolylineId("route"),
-                color: Colors.blue,
-                width: 6,
-                points: polylineCoordinates,
-              )
-            },
-            markers: {
-              Marker(
-                markerId: const MarkerId("currentLocation"),
-                icon: currentLocationIcon,
-                position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
-              ),
-              Marker(
-                markerId: const MarkerId("source"),
-                icon: sourceIcon,
-                position: sourceLocation,
-              ),
-              Marker(
-                markerId: const MarkerId("destination"),
-                icon: destinationIcon,
-                position: destinationLocation,
-              )
-            },
-            onMapCreated: (mapController) {
-              _controller.complete(mapController);
-            },
-          ),
-        ),
-        if (eta != null)
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Text(
-              "ETA: $eta",
-              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-            ),
-          ),
-        Container(
-          color: Colors.white,
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          child: Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _addressController,
-                  decoration: const InputDecoration(
-                    hintText: "Enter destination address",
-                    border: OutlineInputBorder(),
+        Column(
+          children: [
+            Expanded(
+              child: GoogleMap(
+                initialCameraPosition: CameraPosition(
+                  target: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
+                  zoom: currentZoomLevel,
+                ),
+                onCameraMove: (position) {
+                  currentZoomLevel = position.zoom;
+                },
+                polylines: {
+                  Polyline(
+                    polylineId: const PolylineId("route"),
+                    color: Colors.blue,
+                    width: 6,
+                    points: polylineCoordinates,
+                  )
+                },
+                markers: {
+                  Marker(
+                    markerId: const MarkerId("currentLocation"),
+                    icon: currentLocationIcon,
+                    position: LatLng(currentLocation!.latitude!, currentLocation!.longitude!),
                   ),
+                  Marker(
+                    markerId: const MarkerId("source"),
+                    icon: sourceIcon,
+                    position: sourceLocation,
+                  ),
+                  Marker(
+                    markerId: const MarkerId("destination"),
+                    icon: destinationIcon,
+                    position: destinationLocation,
+                  )
+                },
+                onMapCreated: (mapController) {
+                  _controller.complete(mapController);
+                },
+              ),
+            ),
+            if (eta != null)
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(
+                  "$eta",
+                  style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                 ),
               ),
-              const SizedBox(width: 10),
-              ElevatedButton(
-                onPressed: () {
-                  if (_addressController.text.isNotEmpty && currentLocation != null) {
-                    searchDestinationAndDrawRoute(_addressController.text);
-                  } else {
-                    print("Current location not available yet.");
-                  }
-                },
-                child: const Text("Go"),
-              )
-            ],
+            Container(
+              color: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _addressController,
+                      decoration: const InputDecoration(
+                        hintText: "Enter destination address",
+                        border: OutlineInputBorder(),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (_addressController.text.isNotEmpty && currentLocation != null) {
+                        searchDestinationAndDrawRoute(_addressController.text);
+                      } else {
+                        print("Current location not available yet.");
+                      }
+                    },
+                    child: const Text("Go"),
+                  )
+                ],
+              ),
+            ),
+          ],
+        ),
+        Positioned(
+          bottom: 100,
+          left: 20,
+          child: Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: Colors.black.withOpacity(0.8),
+            ),
+            child: const FakeSpeedMeter(),
           ),
         ),
       ],

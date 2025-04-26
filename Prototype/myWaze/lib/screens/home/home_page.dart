@@ -1,6 +1,6 @@
 // home_page.dart
 import 'package:flutter/material.dart';
-import '../../live_tracking_page.dart';
+import '../live_tracking_page.dart';
 import '../settings/settings_screen.dart';
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
