@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" xmlns:di="http://www.omg.org/spec/DD/20100524/DI" xmlns:modeler="http://camunda.org/schema/modeler/1.0" id="Definitions_0ptq55u" targetNamespace="http://bpmn.io/schema/bpmn" exporter="Camunda Modeler" exporterVersion="5.34.0" modeler:executionPlatform="Camunda Cloud" modeler:executionPlatformVersion="8.7.0">
+  <bpmn:collaboration id="Collaboration_1vlkimc">
+    <bpmn:participant id="Participant_1whb3un" name="System" processRef="Process_1um58jo" />
+    <bpmn:participant id="Participant_0jn35a1" name="GPS" processRef="Process_0hs6nz3" />
+    <bpmn:messageFlow id="Flow_0qnxj82" sourceRef="Activity_153lfon" targetRef="Participant_0jn35a1" />
+  </bpmn:collaboration>
+  <bpmn:process id="Process_1um58jo" isExecutable="false">
+    <bpmn:startEvent id="Event_168e6vc">
+      <bpmn:outgoing>Flow_1hamna6</bpmn:outgoing>
+    </bpmn:startEvent>
+    <bpmn:serviceTask id="Activity_1m67d81" name="Display speed camera warning">
+      <bpmn:incoming>Flow_1teik09</bpmn:incoming>
+      <bpmn:outgoing>Flow_1boa72b</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:serviceTask id="Activity_153lfon" name="Continuously checks user&#39;s speed &#38; route">
+      <bpmn:incoming>Flow_1y1eeyf</bpmn:incoming>
+      <bpmn:outgoing>Flow_0klelsv</bpmn:outgoing>
+    </bpmn:serviceTask>
+    <bpmn:exclusiveGateway id="Gateway_0ptxjkr" default="Flow_00ax5em">
+      <bpmn:incoming>Flow_0klelsv</bpmn:incoming>
+      <bpmn:outgoing>Flow_1teik09</bpmn:outgoing>
+      <bpmn:outgoing>Flow_00ax5em</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:exclusiveGateway id="Gateway_1hzva2r">
+      <bpmn:incoming>Flow_1hamna6</bpmn:incoming>
+      <bpmn:incoming>Flow_1boa72b</bpmn:incoming>
+      <bpmn:incoming>Flow_00ax5em</bpmn:incoming>
+      <bpmn:outgoing>Flow_1y1eeyf</bpmn:outgoing>
+    </bpmn:exclusiveGateway>
+    <bpmn:sequenceFlow id="Flow_1hamna6" sourceRef="Event_168e6vc" targetRef="Gateway_1hzva2r" />
+    <bpmn:sequenceFlow id="Flow_1teik09" name="Speed camera Ahead" sourceRef="Gateway_0ptxjkr" targetRef="Activity_1m67d81" />
+    <bpmn:sequenceFlow id="Flow_1boa72b" sourceRef="Activity_1m67d81" targetRef="Gateway_1hzva2r" />
+    <bpmn:sequenceFlow id="Flow_1y1eeyf" sourceRef="Gateway_1hzva2r" targetRef="Activity_153lfon" />
+    <bpmn:sequenceFlow id="Flow_0klelsv" sourceRef="Activity_153lfon" targetRef="Gateway_0ptxjkr" />
+    <bpmn:sequenceFlow id="Flow_00ax5em" sourceRef="Gateway_0ptxjkr" targetRef="Gateway_1hzva2r" />
+  </bpmn:process>
+  <bpmn:process id="Process_0hs6nz3" isExecutable="false" />
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Collaboration_1vlkimc">
+      <bpmndi:BPMNShape id="Participant_1whb3un_di" bpmnElement="Participant_1whb3un" isHorizontal="true">
+        <dc:Bounds x="170" y="80" width="750" height="210" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0uemwfe" bpmnElement="Event_168e6vc">
+        <dc:Bounds x="252" y="192" width="36" height="36" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_0z55594" bpmnElement="Activity_1m67d81">
+        <dc:Bounds x="740" y="170" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="BPMNShape_1n2ziic" bpmnElement="Activity_153lfon">
+        <dc:Bounds x="440" y="170" width="100" height="80" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_0ptxjkr_di" bpmnElement="Gateway_0ptxjkr" isMarkerVisible="true">
+        <dc:Bounds x="595" y="185" width="50" height="50" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="9004" y="482" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape id="Gateway_1hzva2r_di" bpmnElement="Gateway_1hzva2r" isMarkerVisible="true">
+        <dc:Bounds x="345" y="185" width="50" height="50" />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_1hamna6_di" bpmnElement="Flow_1hamna6">
+        <di:waypoint x="288" y="210" />
+        <di:waypoint x="345" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1teik09_di" bpmnElement="Flow_1teik09">
+        <di:waypoint x="645" y="210" />
+        <di:waypoint x="740" y="210" />
+        <bpmndi:BPMNLabel>
+          <dc:Bounds x="659" y="179" width="72" height="27" />
+        </bpmndi:BPMNLabel>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1boa72b_di" bpmnElement="Flow_1boa72b">
+        <di:waypoint x="840" y="210" />
+        <di:waypoint x="870" y="210" />
+        <di:waypoint x="870" y="133" />
+        <di:waypoint x="370" y="133" />
+        <di:waypoint x="370" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_1y1eeyf_di" bpmnElement="Flow_1y1eeyf">
+        <di:waypoint x="395" y="210" />
+        <di:waypoint x="440" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="BPMNEdge_09k06y6" bpmnElement="Flow_0klelsv">
+        <di:waypoint x="540" y="210" />
+        <di:waypoint x="595" y="210" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge id="Flow_00ax5em_di" bpmnElement="Flow_00ax5em">
+        <di:waypoint x="620" y="185" />
+        <di:waypoint x="620" y="133" />
+        <di:waypoint x="370" y="133" />
+        <di:waypoint x="370" y="185" />
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNShape id="Participant_0jn35a1_di" bpmnElement="Participant_0jn35a1" isHorizontal="true">
+        <dc:Bounds x="170" y="320" width="600" height="110" />
+        <bpmndi:BPMNLabel />
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge id="Flow_0qnxj82_di" bpmnElement="Flow_0qnxj82">
+        <di:waypoint x="490" y="250" />
+        <di:waypoint x="490" y="320" />
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>
