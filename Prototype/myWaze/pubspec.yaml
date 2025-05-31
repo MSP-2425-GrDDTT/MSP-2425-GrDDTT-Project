@@ -31,8 +31,8 @@ dependencies:
   flutter:
     sdk: flutter
   font_awesome_flutter: ^10.4.0  # Add this line or use the latest version
-
-
+ 
+  flutter_speed_dial: ^7.0.0
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
@@ -74,7 +74,12 @@ flutter:
     - assets/Badge.png
     - assets/Pin_destination.png
     - assets/Pin_source.png
+    - assets/police_marker.png
 
+    - assets/gas_station_marker.png
+
+    - assets/hazard_marker.png
+ 
   # To add assets to your application, add an assets section, like this:
   # assets:
   #   - images/a_dot_burr.jpeg
